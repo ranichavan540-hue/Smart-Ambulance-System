@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>PULSE Hospital Emergency Dashboard</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #050a12;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #0d1624;
+            padding: 20px 40px;
+            border-bottom: 1px solid #26364b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .hospital-status {
+            color: #00ff9d;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 35px auto;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title h1 {
+            margin-bottom: 8px;
+        }
+
+        .title p {
+            color: #9eacbd;
+        }
+
+        /* Notification */
+
+        #notificationArea {
+            margin-bottom: 25px;
+        }
+
+        .notification {
+            background: #40131b;
+            border: 2px solid #c9364c;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 0 25px rgba(201, 54, 76, 0.35);
+            animation: emergencyPulse 1.5s infinite;
+        }
+
+        @keyframes emergencyPulse {
+
+            0% {
+                box-shadow: 0 0 10px rgba(201, 54, 76, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 30px rgba(201, 54, 76, 0.7);
+            }
+
+            100% {
+                box-shadow: 0 0 10px rgba(201, 54, 76, 0.3);
+            }
+
+        }
+
+        .notification h2 {
+            color: #ff5368;
+            margin-top: 0;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 14px;
+            border-radius: 20px;
+            background: #c9364c;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Cards */
+
+        .cards {
+            display: grid;
+            grid-template-columns:
+                repeat(auto-fit, minmax(250px, 1fr));
+
+            gap: 20px;
+        }
+
+        .card {
+            background: #0d1624;
+            border: 1px solid #26364b;
+            border-radius: 15px;
+            padding: 22px;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #00ff9d;
+        }
+
+        .value {
+            font-size: 18px;
+            margin-top: 10px;
+            word-break: break-word;
+        }
+
+        /* Buttons */
+
+        .map-button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 22px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .map-button:hover {
+            background: #218838;
+        }
+
+        .refresh-button {
+            padding: 12px 22px;
+            background: #26364b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .refresh-button:hover {
+            background: #344a64;
+        }
+
+        .no-alert {
+            background: #0d1624;
+            border: 1px solid #26364b;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            color: #9eacbd;
+        }
+
+        .time {
+            color: #9eacbd;
+            font-size: 14px;
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 25px;
+            text-align: center;
+            border-top: 1px solid #1d2938;
+            color: #718096;
+        }
+
+/* 🛏️ Hospital Bed Availability */
+
+.bed-card {
+    margin-top: 30px;
+    background: #0d1624;
+    border: 1px solid #26364b;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+}
+
+.bed-card h2 {
+    margin-top: 0;
+    color: #00ff9d;
+}
+
+.bed-card h3 {
+    margin-bottom: 20px;
+}
+
+.bed-info {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.bed-box {
+    background: #111d2d;
+    border: 1px solid #26364b;
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.bed-box span {
+    display: block;
+    color: #9eacbd;
+    margin-bottom: 10px;
+}
+
+.bed-box strong {
+    font-size: 28px;
+    color: #00ff9d;
+}
+
+#bedUpdated {
+    color: #718096;
+    margin-top: 20px;
+}
+
+@media (max-width: 700px) {
+
+    .bed-info {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+        🟢 PULSE
+    </div>
+
+    <div class="hospital-status">
+        🏥 HOSPITAL ONLINE
+    </div>
+
+</header>
+
+
+<div class="container">
+
+
+    <div class="title">
+
+        <h1>🏥 Hospital Emergency Dashboard</h1>
+
+        <p>
+            Real-time emergency alerts from PULSE Smart Ambulance.
+        </p>
+
+        <button
+            id="refreshAlertsButton"
+            class="refresh-button"
+            onclick="handleRefreshAlerts()"
+        >
+            🔄 Refresh Alerts
+        </button>
+    </div>
+
+
+    <!-- NOTIFICATION AREA -->
+
+    <div id="notificationArea">
+
+        <div class="no-alert">
+            Checking for emergency alerts...
+        </div>
+
+    </div>
+
+
+    <!-- LATEST EMERGENCY -->
+
+    <div id="latestEmergency"></div>
+
+    <!-- 🛏️ Hospital Bed Availability -->
+    <div id="bedAvailability" class="bed-card">
+
+        <h2>🛏️ Hospital Bed Availability</h2>
+
+        <h3 id="hospitalName">City Hospital</h3>
+
+        <div class="bed-info">
+
+            <div class="bed-box">
+                <span>Available Beds</span>
+                <strong id="availableBeds">--</strong>
+            </div>
+
+            <div class="bed-box">
+                <span>Total Beds</span>
+                <strong id="totalBeds">--</strong>
+            </div>
+
+            <div class="bed-box">
+                <span>Occupied Beds</span>
+                <strong id="occupiedBeds">--</strong>
+            </div>
+
+            <div class="bed-box">
+                <span>ICU Available</span>
+                <strong id="icuAvailable">--</strong>
+            </div>
+
+        </div>
+
+        <p id="bedUpdated">Loading...</p>
+
+    </div>
+
+
+</div>
+
+
+<footer>
+
+    PULSE — IoT Smart Ambulance System<br>
+
+    Hospital Emergency Response Dashboard
+
+</footer>
+
+
+<script>
+
+const API_URL =
+    "http://127.0.0.1:8000";
+
+
+let lastNotificationCount = 0;
+
+
+/* =========================================
+   LOAD HOSPITAL NOTIFICATIONS
+========================================= */
+async function loadHospitalNotifications() {
+
+    console.log("🔄 Loading hospital notifications...");
+
+    const notificationArea =
+        document.getElementById("notificationArea");
+
+    const latestEmergency =
+        document.getElementById("latestEmergency");
+
+    try {
+
+        const response = await fetch(
+            "http://127.0.0.1:8000/api/hospital-notifications"
+        );
+
+        console.log("API Response:", response.status);
+
+        if (!response.ok) {
+            throw new Error("API request failed");
+        }
+
+        const data = await response.json();
+
+        console.log("Hospital Data:", data);
+
+        const notifications =
+            data.notifications || [];
+
+        // =========================
+        // NO ALERT
+        // =========================
+
+        if (notifications.length === 0) {
+
+            notificationArea.innerHTML = `
+                <div class="no-alert">
+
+                    <h2>✅ No Emergency Alerts</h2>
+
+                    <p>
+                        Hospital is monitoring the system.
+                    </p>
+
+                </div>
+            `;
+
+            latestEmergency.innerHTML = "";
+
+            return;
+        }
+
+
+        // =========================
+        // LATEST ALERT
+        // =========================
+
+        const latest =
+            notifications[notifications.length - 1];
+
+
+        notificationArea.innerHTML = `
+
+            <div class="notification">
+
+                <span class="status">
+                    ${
+                        latest.status === "ACKNOWLEDGED"
+                        ? "🟢 ACKNOWLEDGED"
+                        : "🔴 EMERGENCY"
+                    }
+                </span>
+
+                <h2>
+                    🚨 SOS Emergency Notification
+                </h2>
+
+                <p>
+                    <strong>
+                        ${latest.message}
+                    </strong>
+                </p>
+
+                <p class="time">
+                    🕐 ${formatDate(latest.timestamp)}
+                </p>
+                ${
+                    latest.acknowledged_at
+                    ? `
+                        <p class="time">
+                            ✅ Acknowledged:
+                            ${formatDate(latest.acknowledged_at)}
+                        </p>
+                        `
+                        : ""
+                }
+
+            </div>
+
+        `;
+
+
+        // =========================
+        // LOCATION
+        // =========================
+
+        const latitude =
+            latest.latitude ?? "Unavailable";
+
+        const longitude =
+            latest.longitude ?? "Unavailable";
+
+
+        // =========================
+        // GOOGLE MAPS
+        // =========================
+
+        let mapLink = "#";
+
+        if (
+            latest.latitude != null &&
+            latest.longitude != null
+        ) {
+
+            mapLink =
+                `https://www.google.com/maps?q=${latest.latitude},${latest.longitude}`;
+
+        }
+
+
+        // =========================
+        // DETAILS
+        // =========================
+
+        latestEmergency.innerHTML = `
+
+            <div class="cards">
+
+                <div class="card">
+
+                    <h3>🚑 Ambulance</h3>
+
+                    <div class="value">
+                        ${latest.ambulance_id || "Unknown"}
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>📍 Latitude</h3>
+
+                    <div class="value">
+                        ${latitude}
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>📍 Longitude</h3>
+
+                    <div class="value">
+                        ${longitude}
+                    </div>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>🏥 Hospital</h3>
+
+                    <div class="value">
+                        ${latest.hospital || "City Hospital"}
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div style="text-align:center;">
+
+                ${
+                    mapLink !== "#"
+                    ?
+                    `
+                    <a
+                        href="${mapLink}"
+                        target="_blank"
+                        class="map-button"
+                    >
+                        📍 View Emergency Location
+                    </a>
+
+                    <br><br>
+
+                    <button
+                        class="acknowledge-button"
+                        onclick="acknowledgeAlert(${latest.id})"
+                    >
+                        ✅ Acknowledge Alert
+                    </button>
+                    `
+                    :
+                    ""
+                }
+
+            </div>
+
+        `;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Hospital Notification Error:",
+            error
+        );
+
+        notificationArea.innerHTML = `
+
+            <div class="no-alert">
+
+                ❌ Unable to connect to PULSE backend.
+
+                <br><br>
+
+                Make sure FastAPI server is running.
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+/* =========================================
+   DATE FORMAT
+========================================= */
+
+function formatDate(timestamp) {
+
+    if (!timestamp) {
+
+        return "Unknown time";
+
+    }
+
+    return new Date(timestamp)
+        .toLocaleString();
+
+}
+
+
+/* =========================================
+   ALERT SOUND
+========================================= */
+
+function playAlertSound() {
+
+    try {
+
+        const audioContext =
+            new (
+                window.AudioContext ||
+                window.webkitAudioContext
+            )();
+
+
+        const oscillator =
+            audioContext.createOscillator();
+
+
+        const gain =
+            audioContext.createGain();
+
+
+        oscillator.connect(gain);
+
+        gain.connect(
+            audioContext.destination
+        );
+
+
+        oscillator.frequency.value = 800;
+
+        oscillator.start();
+
+
+        gain.gain.setValueAtTime(
+            0.2,
+            audioContext.currentTime
+        );
+
+
+        oscillator.stop(
+            audioContext.currentTime + 0.5
+        );
+
+    }
+
+    catch (error) {
+
+        console.log(
+            "Alert sound unavailable"
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   BROWSER ALERT
+========================================= */
+function showBrowserAlert() {
+
+    if (
+        "Notification" in window &&
+        Notification.permission === "granted"
+    ) {
+
+        new Notification(
+            "🚨 PULSE Emergency Alert",
+            {
+                body:
+                    "Emergency SOS received by hospital."
+            }
+        );
+
+    }
+
+}
+
+/* =========================================
+   REQUEST NOTIFICATION PERMISSION
+========================================= */
+function handleRefreshAlerts() {
+
+    // User clicked the button, so permission request is allowed
+    if (
+        "Notification" in window &&
+        Notification.permission === "default"
+    ) {
+        Notification.requestPermission();
+    }
+
+    // Load latest hospital alerts
+    loadHospitalNotifications();
+}
+
+
+/* =========================================
+   AUTO REFRESH
+========================================= */
+window.onload = function() {
+
+    loadHospitalNotifications();
+
+    loadHospitalBeds();
+
+};
+/*
+   Check for new SOS every 3 seconds
+*/
+
+setInterval(
+    loadHospitalNotifications,
+    3000
+);
+async function acknowledgeAlert(notificationId) {
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/api/hospital-notifications/${notificationId}/acknowledge`,
+            {
+                method: "POST"
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+
+            alert("❌ Unable to acknowledge alert.");
+
+            return;
+        }
+
+        alert("✅ Emergency Alert Acknowledged!");
+
+        // Reload hospital notification
+        loadHospitalNotifications();
+
+    }
+    catch (error) {
+
+        console.error(
+            "Acknowledge Error:",
+            error
+        );
+
+        alert("❌ Backend connection failed.");
+
+    }
+
+}
+
+
+// 🛏️ Hospital Bed Availability
+async function loadHospitalBeds() {
+
+    try {
+
+        const response = await fetch(
+            "http://127.0.0.1:8000/api/hospital-beds"
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error("Bed API failed");
+        }
+
+        document.getElementById("hospitalName").textContent =
+            data.hospital;
+
+        document.getElementById("availableBeds").textContent =
+            data.available_beds;
+
+        document.getElementById("totalBeds").textContent =
+            data.total_beds;
+
+        document.getElementById("occupiedBeds").textContent =
+            data.occupied_beds;
+
+        document.getElementById("icuAvailable").textContent =
+            data.icu_available;
+
+        document.getElementById("bedUpdated").textContent =
+            "Last Updated: " +
+            new Date(data.last_updated).toLocaleString();
+
+    }
+    catch (error) {
+
+        console.error(
+            "Hospital Bed Error:",
+            error
+        );
+
+        document.getElementById("bedUpdated").textContent =
+            "❌ Unable to load bed availability.";
+
+    }
+}
+setInterval(
+    loadHospitalBeds,
+    10000
+);
+</script>
+
+
+</body>
+
+</html>

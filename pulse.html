@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PULSE IoT Smart Ambulance</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #050a12;
+            color: white;
+            min-height: 100vh;
+        }
+
+        header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #1d2938;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 650px;
+            margin: 40px auto;
+            text-align: center;
+        }
+
+        /* Emergency Contact */
+
+        .emergency-contact {
+            background: #0d1624;
+            padding: 25px;
+            border-radius: 15px;
+            border: 1px solid #26364b;
+            margin-bottom: 30px;
+        }
+
+        .emergency-contact h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .emergency-contact input {
+            width: 90%;
+            padding: 13px;
+            margin: 7px;
+            border-radius: 8px;
+            border: 1px solid #46566b;
+            background: #080f19;
+            color: white;
+            font-size: 15px;
+        }
+
+        .save-contact-btn {
+            padding: 12px 22px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 8px;
+            background: #28a745;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .save-contact-btn:hover {
+            background: #218838;
+        }
+
+        #contactDisplay {
+            margin-top: 20px;
+        }
+
+        /* SOS */
+
+        .sos-button {
+            padding: 18px 45px;
+            border: none;
+            border-radius: 10px;
+            background: #c9364c;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 50, 70, 0.4);
+        }
+
+        .sos-button:hover {
+            background: #e04458;
+        }
+
+        .sos-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .sos-message {
+            margin-top: 20px;
+            color: #00ff9d;
+            line-height: 1.8;
+        }
+
+        /* Google Maps */
+
+        .map-button {
+            display: none;
+            width: fit-content;
+            margin: 18px auto;
+            padding: 12px 22px;
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .map-button:hover {
+            background: #218838;
+        }
+
+        /* ✅ Acknowledge Alert Button */
+
+#acknowledgeButton {
+    display: inline-block;
+    margin: 20px auto;
+    padding: 14px 28px;
+
+    background: #007bff;
+    color: white;
+
+    border: none;
+    border-radius: 10px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+
+    transition: 0.3s;
+}
+
+#acknowledgeButton:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+}
+
+#acknowledgeButton:active {
+    transform: scale(0.98);
+}
+/* =========================================
+   SOS ANALYTICS
+========================================= */
+
+.analytics-box {
+    margin-top: 35px;
+    padding: 25px;
+
+    background: #0d1624;
+
+    border: 1px solid #26364b;
+
+    border-radius: 15px;
+
+    text-align: center;
+}
+
+.analytics-box h2 {
+    margin-bottom: 25px;
+}
+
+.analytics-cards {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.analytics-card {
+    width: 160px;
+
+    padding: 20px;
+
+    background: #111d2d;
+
+    border: 1px solid #33465e;
+
+    border-radius: 12px;
+}
+
+.analytics-icon {
+    font-size: 28px;
+}
+
+.analytics-card h3 {
+    font-size: 15px;
+    color: #9eacbd;
+}
+
+.analytics-card p {
+    font-size: 30px;
+    font-weight: bold;
+    color: #00ff9d;
+
+    margin: 10px 0 0;
+}
+
+.analytics-refresh {
+    margin-top: 25px;
+
+    padding: 12px 22px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #007bff;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.analytics-refresh:hover {
+    background: #0056b3;
+}
+/* =========================================
+   SOS HISTORY
+========================================= */
+
+.history-box {
+    margin-top: 30px;
+    padding: 25px;
+
+    background: #0d1624;
+
+    border: 1px solid #26364b;
+
+    border-radius: 15px;
+
+    text-align: center;
+}
+
+.history-box h2 {
+    margin-bottom: 20px;
+}
+
+.history-refresh {
+    padding: 11px 20px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #007bff;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.history-refresh:hover {
+    background: #0056b3;
+}
+
+.sos-history-card {
+    margin-top: 18px;
+
+    padding: 18px;
+
+    background: #111d2d;
+
+    border: 1px solid #33465e;
+
+    border-radius: 12px;
+
+    text-align: left;
+}
+
+.sos-history-card h3 {
+    margin-top: 0;
+
+    color: #ff5368;
+}
+
+.sos-history-card p {
+    margin: 8px 0;
+
+    color: #dce5ef;
+}
+
+.history-map-button {
+    display: inline-block;
+
+    margin-top: 10px;
+
+    padding: 10px 18px;
+
+    background: #28a745;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    font-weight: bold;
+}
+
+.history-map-button:hover {
+    background: #218838;
+}
+
+.no-history {
+    color: #9eacbd;
+
+    margin-top: 20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🟢 PULSE</div>
+    <div>IoT Smart Ambulance System</div>
+</header>
+
+
+<div class="container">
+
+    <!-- EMERGENCY CONTACT -->
+
+    <div class="emergency-contact">
+
+        <h2>📱 Emergency Contact</h2>
+
+        <input
+            type="text"
+            id="contactName"
+            placeholder="Enter contact name"
+        >
+
+        <input
+            type="tel"
+            id="contactPhone"
+            placeholder="Enter 10-digit phone number"
+            maxlength="10"
+        >
+
+        <br>
+
+        <button
+            type="button"
+            class="save-contact-btn"
+            onclick="saveEmergencyContact()"
+        >
+            💾 Save Contact
+        </button>
+
+        <div id="contactDisplay"></div>
+
+    </div>
+
+
+    <!-- SOS -->
+
+    <button
+        id="sosButton"
+        class="sos-button"
+        onclick="activateSOS()"
+    >
+        🚨 EMERGENCY SOS
+    </button>
+
+    <div id="sosMessage" class="sos-message"></div>
+
+    <a
+        id="mapButton"
+        href="#"
+        target="_blank"
+        class="map-button"
+    >
+        📍 View on Google Maps
+    </a>
+
+    <!-- ✅ Acknowledge Alert -->
+
+    <div id="acknowledgeBox" style="display:none; margin-top:25px; text-align:center;">
+
+        <button
+            id="acknowledgeButton"
+            class="acknowledge-button"
+            onclick="acknowledgeAlert()"
+        >
+            ✅ Acknowledge Alert
+        </button>
+
+    </div>
+
+    <div id="sosCallBox" style="display:none; margin-top:20px; text-align:center;">
+
+        <p style="color:#ff5368; font-weight:bold;">
+            🚨 Emergency Contact
+        </p>
+
+        <a
+            id="sosCallButton"
+            href="#"
+            style="
+                display:inline-block;
+                padding:12px 22px;
+                background:#dc3545;
+                color:white;
+                text-decoration:none;
+                border-radius:8px;
+                font-weight:bold;
+            "
+        >
+            📞 Call Emergency Contact
+        </a>
+
+    </div>
+    <!-- =========================================
+     SOS ANALYTICS
+    ========================================= -->
+
+    <div class="analytics-box">
+
+        <h2>📊 SOS Analytics</h2>
+
+        <div class="analytics-cards">
+
+            <div class="analytics-card">
+                <div class="analytics-icon">🚨</div>
+                <h3>Total SOS</h3>
+                <p id="totalSOS">0</p>
+            </div>
+
+            <div class="analytics-card">
+                <div class="analytics-icon">✅</div>
+                <h3>Acknowledged</h3>
+                <p id="acknowledgedSOS">0</p>
+            </div>
+
+            <div class="analytics-card">
+                <div class="analytics-icon">🏥</div>
+                <h3>Hospital Alerts</h3>
+                <p id="hospitalAlerts">0</p>
+            </div>
+
+        </div>
+
+        <button
+            class="analytics-refresh"
+            onclick="loadSOSAnalytics()"
+        >
+            🔄 Refresh Analytics
+        </button>
+
+    </div>
+
+    <!-- =========================================
+     📜 SOS HISTORY
+    ========================================= -->
+
+    <div class="history-box">
+
+        <h2>📜 SOS History</h2>
+
+        <button
+            class="history-refresh"
+            onclick="loadSOSHistory()"
+        >
+            🔄 Refresh History
+        </button>
+
+        <div id="sosHistoryList">
+
+            <p class="no-history">
+                No SOS history available.
+            </p>
+
+        </div>
+
+    </div>
+   
+</div>
+
+
+<script>
+
+    let hospitalNotificationId = null;
+
+/* =========================================
+   SAVE EMERGENCY CONTACT
+========================================= */
+function saveEmergencyContact() {
+
+    const name =
+        document.getElementById("contactName").value.trim();
+
+    const phone =
+        document.getElementById("contactPhone").value.trim();
+
+    if (name === "" || phone === "") {
+        alert("Please enter contact name and phone number.");
+        return;
+    }
+
+    if (!/^[0-9]{10}$/.test(phone)) {
+        alert("Please enter a valid 10-digit phone number.");
+        return;
+    }
+
+    // Get existing contacts
+    let contacts =
+        JSON.parse(localStorage.getItem("emergencyContacts")) || [];
+
+    // Add new contact
+    contacts.push({
+        name: name,
+        phone: phone
+    });
+
+    // Save all contacts
+    localStorage.setItem(
+        "emergencyContacts",
+        JSON.stringify(contacts)
+    );
+
+    // Clear input fields
+    document.getElementById("contactName").value = "";
+    document.getElementById("contactPhone").value = "";
+
+    displayEmergencyContact();
+
+    alert("✅ Emergency Contact Saved!");
+}
+/* =========================================
+   DISPLAY SAVED CONTACT
+========================================= */
+function displayEmergencyContact() {
+
+    const contactDisplay =
+        document.getElementById("contactDisplay");
+
+    const contacts =
+        JSON.parse(localStorage.getItem("emergencyContacts")) || [];
+
+    if (contacts.length === 0) {
+
+        contactDisplay.innerHTML =
+            "<p>No emergency contacts saved.</p>";
+
+        return;
+    }
+
+    contactDisplay.innerHTML = `
+        <h3>📋 Saved Emergency Contacts</h3>
+    `;
+
+    contacts.forEach((contact, index) => {
+
+        contactDisplay.innerHTML += `
+
+            <div style="
+                background:#111d2d;
+                padding:15px;
+                margin:10px 0;
+                border-radius:10px;
+                border:1px solid #33465e;
+                text-align:left;
+            ">
+
+                <p>
+                    👤 <strong>${contact.name}</strong>
+                </p>
+
+                <p>
+                    📞 ${contact.phone}
+                </p>
+
+                <button
+                    class="save-contact-btn"
+                    onclick="callEmergencyContact(${index})"
+                >
+                    📞 Call
+                </button>
+
+                <button
+                    class="save-contact-btn"
+                    style="background:#dc3545;"
+                    onclick="deleteEmergencyContact(${index})"
+                >
+                    🗑️ Delete
+                </button>
+
+            </div>
+        `;
+    });
+}
+
+/* =========================================
+   CALL EMERGENCY CONTACT
+========================================= */
+function callEmergencyContact(index) {
+
+    const contacts =
+        JSON.parse(localStorage.getItem("emergencyContacts")) || [];
+
+    if (!contacts[index]) {
+
+        alert("Contact not found.");
+
+        return;
+    }
+
+    window.location.href =
+        "tel:" + contacts[index].phone;
+}
+
+
+function deleteEmergencyContact(index) {
+
+    let contacts =
+        JSON.parse(localStorage.getItem("emergencyContacts")) || [];
+
+    if (!contacts[index]) {
+        return;
+    }
+
+    const confirmDelete =
+        confirm(
+            "Are you sure you want to delete " +
+            contacts[index].name +
+            "?"
+        );
+
+    if (!confirmDelete) {
+        return;
+    }
+
+    contacts.splice(index, 1);
+
+    localStorage.setItem(
+        "emergencyContacts",
+        JSON.stringify(contacts)
+    );
+
+    displayEmergencyContact();
+}
+/* =========================================
+   SOS
+========================================= */
+
+async function activateSOS() {
+
+    const button =
+        document.getElementById("sosButton");
+
+    const message =
+        document.getElementById("sosMessage");
+
+    const mapButton =
+        document.getElementById("mapButton");
+
+    const sosCallBox =
+        document.getElementById("sosCallBox");
+
+    const sosCallButton =
+        document.getElementById("sosCallButton");
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "🚨 SENDING SOS...";
+
+
+    try {
+
+        let latitude = null;
+        let longitude = null;
+
+
+        /* GPS */
+
+        if (navigator.geolocation) {
+
+            await new Promise((resolve) => {
+
+                navigator.geolocation.getCurrentPosition(
+
+                    function(position) {
+
+                        latitude =
+                            position.coords.latitude;
+
+                        longitude =
+                            position.coords.longitude;
+
+                        resolve();
+
+                    },
+
+                    function(error) {
+
+                        console.log(
+                            "GPS Error:",
+                            error.message
+                        );
+
+                        resolve();
+
+                    }
+
+                );
+
+            });
+
+        }
+
+
+        /* SEND SOS TO BACKEND */
+
+        const response = await fetch(
+
+            "http://127.0.0.1:8000/api/sos",
+
+            {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    latitude: latitude,
+
+                    longitude: longitude,
+
+                    contacts:
+                        JSON.parse(
+                            localStorage.getItem("emergencyContacts")
+                        ) || []
+
+                })
+
+            }
+
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (response.ok) {
+
+            hospitalNotificationId =
+                data.hospital_notification.id;
+
+
+            message.innerHTML =
+
+                "✓ " + data.message +
+
+                "<br>📍 Latitude: " +
+                data.latitude +
+
+                "<br>📍 Longitude: " +
+                data.longitude;
+
+
+            button.textContent =
+                "✓ SOS ACTIVATED";
+
+                // ✅ Show Acknowledge Alert button
+
+                const acknowledgeBox =
+                    document.getElementById("acknowledgeBox");
+
+                acknowledgeBox.style.display = "block";
+
+                // 📱 Send Alert to Emergency Contacts
+
+                const contacts =
+                    JSON.parse(
+                        localStorage.getItem("emergencyContacts")
+                    ) || [];
+
+                for (const contact of contacts) {
+
+                    try {
+
+                        await fetch(
+                            "http://127.0.0.1:8000/api/emergency-alert",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
+
+                                body: JSON.stringify({
+                                    phone: contact.phone,
+
+                                    message:
+                                        `🚨 EMERGENCY SOS! Ambulance MH-12-AMB-0417 needs immediate assistance. Location: ${data.latitude}, ${data.longitude}`
+                                })
+                            }
+                        );
+
+                        console.log(
+                            "Emergency alert sent to:",
+                            contact.phone
+                        );
+
+                    } catch (error) {
+
+                        console.error(
+                            "Emergency alert failed:",
+                            error
+                        );
+
+                    }
+                }
+                // 📞 Show Call Emergency Contact button
+
+                if (contacts.length > 0) {
+
+                    const sosCallBox =
+                        document.getElementById("sosCallBox");
+
+                    const sosCallButton =
+                        document.getElementById("sosCallButton");
+
+                    sosCallButton.href =
+                        "tel:" + contacts[0].phone;
+
+                    sosCallBox.style.display = "block";
+                }
+
+
+            /* GOOGLE MAPS */
+
+            if (
+                data.latitude !== null &&
+                data.longitude !== null
+            ) {
+
+                mapButton.href =
+                    `https://www.google.com/maps?q=${data.latitude},${data.longitude}`;
+
+                mapButton.style.display =
+                    "block";
+            }
+
+
+            /* Emergency Contact */
+
+            const phone =
+                localStorage.getItem(
+                    "emergencyPhone"
+                );
+
+
+            if (phone) {
+
+                console.log(
+                    "Emergency contact:",
+                    phone
+                );
+
+                /*
+                  पुढच्या step मध्ये
+                  automatic alert/call
+                  backend सोबत connect करू.
+                */
+
+            }
+
+
+        } else {
+
+            message.textContent =
+                "❌ SOS request failed.";
+
+            button.textContent =
+                "🚨 EMERGENCY SOS";
+
+            button.disabled = false;
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "SOS Error:",
+            error
+        );
+
+
+        message.textContent =
+            "❌ Backend connection failed.";
+
+
+        button.textContent =
+            "🚨 EMERGENCY SOS";
+
+
+        button.disabled = false;
+
+    }
+
+}
+
+
+/* =========================================
+   LOAD SAVED CONTACT
+========================================= */
+
+window.onload = function() {
+
+    displayEmergencyContact();
+
+    loadSOSAnalytics();
+
+    loadSOSHistory();
+
+};
+
+/* =========================================
+   ACKNOWLEDGE ALERT
+========================================= */
+async function acknowledgeAlert() {
+
+    const button =
+        document.getElementById("acknowledgeButton");
+
+    const message =
+        document.getElementById("sosMessage");
+
+
+    if (!hospitalNotificationId) {
+
+        alert("❌ Hospital notification ID not found.");
+
+        return;
+    }
+
+
+    button.disabled = true;
+
+    button.textContent =
+        "⏳ Acknowledging...";
+
+
+    try {
+
+        const response = await fetch(
+
+            "http://127.0.0.1:8000/api/hospital-notifications/"
+            + hospitalNotificationId
+            + "/acknowledge",
+
+            {
+                method: "POST"
+            }
+
+        );
+
+
+        const data =
+            await response.json();
+
+
+        if (
+            response.ok &&
+            data.status === "SUCCESS"
+        ) {
+
+            button.textContent =
+                "✅ Alert Acknowledged";
+
+            button.style.background =
+                "#28a745";
+
+            message.innerHTML +=
+                "<br>✅ Emergency Alert Acknowledged.";
+
+            console.log(
+                "Hospital acknowledgement:",
+                data
+            );
+
+        } else {
+
+            button.disabled = false;
+
+            button.textContent =
+                "✅ Acknowledge Alert";
+
+            alert(
+                "❌ " +
+                (data.message ||
+                "Acknowledgement failed.")
+            );
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Acknowledge Error:",
+            error
+        );
+
+        button.disabled = false;
+
+        button.textContent =
+            "✅ Acknowledge Alert";
+
+        alert(
+            "❌ Backend connection failed."
+        );
+
+    }
+    
+}
+/* =========================================
+   SOS ANALYTICS
+========================================= */
+
+async function loadSOSAnalytics() {
+
+    try {
+
+        // Get SOS history
+        const sosResponse = await fetch(
+            "http://127.0.0.1:8000/api/sos-history"
+        );
+
+        const sosData = await sosResponse.json();
+
+        document.getElementById("totalSOS").textContent =
+            sosData.total_sos;
+
+
+        // Get hospital notifications
+        const hospitalResponse = await fetch(
+            "http://127.0.0.1:8000/api/hospital-notifications"
+        );
+
+        const hospitalData =
+            await hospitalResponse.json();
+
+        document.getElementById("hospitalAlerts").textContent =
+            hospitalData.total_notifications;
+
+
+        // Count acknowledged alerts
+        let acknowledged = 0;
+
+        hospitalData.notifications.forEach(function(notification) {
+
+            if (notification.status === "ACKNOWLEDGED") {
+
+                acknowledged++;
+
+            }
+
+        });
+
+        document.getElementById("acknowledgedSOS").textContent =
+            acknowledged;
+
+
+    } catch (error) {
+
+        console.error(
+            "Analytics Error:",
+            error
+        );
+
+    }
+
+}
+// =========================================
+// 📜 LOAD SOS HISTORY
+// =========================================
+
+async function loadSOSHistory() {
+
+    const historyList =
+        document.getElementById("sosHistoryList");
+
+    historyList.innerHTML =
+        "<p>⏳ Loading SOS history...</p>";
+
+    try {
+
+        const response = await fetch(
+            "http://127.0.0.1:8000/api/sos-history"
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+
+            historyList.innerHTML =
+                "<p>❌ Failed to load SOS history.</p>";
+
+            return;
+        }
+
+        if (
+            !data.history ||
+            data.history.length === 0
+        ) {
+
+            historyList.innerHTML =
+                '<p class="no-history">No SOS history available.</p>';
+
+            return;
+        }
+
+        historyList.innerHTML = "";
+
+        data.history.reverse().forEach(function(sos) {
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "sos-history-card";
+
+            card.innerHTML = `
+
+                <h3>🚨 ${sos.status}</h3>
+
+                <p>
+                    🚑 <strong>Ambulance:</strong>
+                    ${sos.ambulance_id}
+                </p>
+
+                <p>
+                    📍 <strong>Latitude:</strong>
+                    ${sos.latitude}
+                </p>
+
+                <p>
+                    📍 <strong>Longitude:</strong>
+                    ${sos.longitude}
+                </p>
+
+                <p>
+                    📱 <strong>Contacts Notified:</strong>
+                    ${sos.contacts_notified}
+                </p>
+
+                <p>
+                    ⏰ <strong>Time:</strong>
+                    ${sos.timestamp}
+                </p>
+
+                ${
+                    sos.map_link
+                    ?
+                    `
+                    <a
+                        href="${sos.map_link}"
+                        target="_blank"
+                        class="history-map-button"
+                    >
+                        📍 View Location
+                    </a>
+                    `
+                    :
+                    ""
+                }
+
+            `;
+
+            historyList.appendChild(card);
+
+        });
+
+    }
+    catch (error) {
+
+        console.error(
+            "SOS History Error:",
+            error
+        );
+
+        historyList.innerHTML =
+            "<p>❌ Backend connection failed.</p>";
+    }
+}
+</script>
+
+</body>
+</html>
