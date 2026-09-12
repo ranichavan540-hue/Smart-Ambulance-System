@@ -101,7 +101,7 @@ It focuses on reducing communication delays between ambulances and hospitals and
 
 ## 🚀 Live Demo
 
-[Open PULSE Smart Ambulance System](https://smart-ambulance-system-1.onrender.com)
+
 
 ## 🚑 Project Name
 
