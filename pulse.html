@@ -742,7 +742,7 @@ async function activateSOS() {
 
         const response = await fetch(
 
-            "http://127.0.0.1:8000/api/sos",
+            "https://smart-ambulance-system-3nnp.onrender.com/api/sos",
 
             {
 
@@ -814,7 +814,7 @@ async function activateSOS() {
                     try {
 
                         await fetch(
-                            "http://127.0.0.1:8000/api/emergency-alert",
+                            "https://smart-ambulance-system-3nnp.onrender.com/api/emergency-alert",
                             {
                                 method: "POST",
 
@@ -981,7 +981,7 @@ async function acknowledgeAlert() {
 
         const response = await fetch(
 
-            "http://127.0.0.1:8000/api/hospital-notifications/"
+            "https://smart-ambulance-system-3nnp.onrender.com/api/hospital-notifications/"
             + hospitalNotificationId
             + "/acknowledge",
 
@@ -1060,7 +1060,7 @@ async function loadSOSAnalytics() {
 
         // Get SOS history
         const sosResponse = await fetch(
-            "http://127.0.0.1:8000/api/sos-history"
+            "https://smart-ambulance-system-3nnp.onrender.com/api/sos-history"
         );
 
         const sosData = await sosResponse.json();
@@ -1071,7 +1071,7 @@ async function loadSOSAnalytics() {
 
         // Get hospital notifications
         const hospitalResponse = await fetch(
-            "http://127.0.0.1:8000/api/hospital-notifications"
+            "https://smart-ambulance-system-3nnp.onrender.com/api/hospital-notifications"
         );
 
         const hospitalData =
@@ -1123,7 +1123,7 @@ async function loadSOSHistory() {
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:8000/api/sos-history"
+            "https://smart-ambulance-system-3nnp.onrender.com/api/sos-history"
         );
 
         const data = await response.json();

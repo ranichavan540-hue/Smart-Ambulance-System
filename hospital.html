@@ -353,7 +353,7 @@
 <script>
 
 const API_URL =
-    "http://127.0.0.1:8000";
+    "https://smart-ambulance-system-3nnp.onrender.com";
 
 
 let lastNotificationCount = 0;
@@ -375,7 +375,7 @@ async function loadHospitalNotifications() {
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:8000/api/hospital-notifications"
+            "https://smart-ambulance-system-3nnp.onrender.com/api/hospital-notifications"
         );
 
         console.log("API Response:", response.status);
@@ -784,7 +784,7 @@ async function loadHospitalBeds() {
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:8000/api/hospital-beds"
+            "https://smart-ambulance-system-3nnp.onrender.com/api/hospital-beds"
         );
 
         const data = await response.json();

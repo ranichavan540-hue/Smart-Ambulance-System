@@ -1791,7 +1791,7 @@ async function activateSOS() {
         // ==============================
 
         const response = await fetch(
-            "http://127.0.0.1:8000/api/sos",
+            "https://smart-ambulance-system-3nnp.onrender.com/api/sos",
             {
                 method: "POST",
 
@@ -1854,7 +1854,7 @@ async function activateSOS() {
 
                     const alertResponse =
                         await fetch(
-                            "http://127.0.0.1:8000/api/emergency-alert",
+                            "https://smart-ambulance-system-3nnp.onrender.com/api/emergency-alert",
                             {
                                 method: "POST",
 
@@ -2074,7 +2074,7 @@ async function loadSOSHistory() {
         // =========================
 
         const response = await fetch(
-            "http://127.0.0.1:8000/api/sos-history"
+            "https://smart-ambulance-system-3nnp.onrender.com/api/sos-history"
         );
 
         const data = await response.json();
@@ -2167,7 +2167,7 @@ async function loadSOSHistory() {
 
         const hospitalResponse =
             await fetch(
-                "http://127.0.0.1:8000/api/hospital-notifications"
+                "https://smart-ambulance-system-3nnp.onrender.com/api/hospital-notifications"
             );
 
         const hospitalData =
@@ -2334,7 +2334,7 @@ async function loadHospitalBeds() {
     try {
 
         const response = await fetch(
-            "http://127.0.0.1:8000/api/hospital-beds"
+            "https://smart-ambulance-system-3nnp.onrender.com/api/hospital-beds"
         );
 
         const data = await response.json();
@@ -2440,7 +2440,7 @@ async function generateEmergencyPDF() {
         // =========================================
 
         const response = await fetch(
-            "http://127.0.0.1:8000/api/sos-history"
+            "https://smart-ambulance-system-3nnp.onrender.com/api/sos-history"
         );
 
         const data = await response.json();
@@ -2569,7 +2569,7 @@ async function generateEmergencyPDF() {
         // =========================================
 
         const hospitalResponse = await fetch(
-            "http://127.0.0.1:8000/api/hospital-notifications"
+            "https://smart-ambulance-system-3nnp.onrender.com/api/hospital-notifications"
         );
 
 
